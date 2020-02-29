@@ -11,7 +11,7 @@
 
 Contenido:
 
-* Codigo en NodeJs
+* Codigo en C#
 
 Colaboradores:
 * Carlos Andree Avalos Soto       201408580
