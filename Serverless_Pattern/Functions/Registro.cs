@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Serverless_Pattern.Helpers;
+using Serverless_Pattern.Models;
 
 namespace Serverless_Pattern.Functions
 {
@@ -48,12 +49,12 @@ namespace Serverless_Pattern.Functions
                 if (registro.valido(user_name, primer_nombre, primer_apellido, fecha_nacimiento, pais, ciudad, password, createdAt, updatedAt)) {
                     responseMessage = registro.insertar_registro(user_name, email, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, pais, ciudad,password, createdAt, updatedAt);
                     conn.close();
-                    return new OkObjectResult(responseMessage);
+                    return new OkObjectResult(JsonConvert.SerializeObject(new response(true, responseMessage)));
                 }
                 
             }
             conn.close();
-            return new OkObjectResult(responseMessage);
+            return new OkObjectResult(JsonConvert.SerializeObject(new response(false, responseMessage)));
 
 
 
