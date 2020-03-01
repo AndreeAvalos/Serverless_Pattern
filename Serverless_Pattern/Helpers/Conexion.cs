@@ -7,7 +7,7 @@ namespace Serverless_Pattern.Helpers
 {
     public class Conexion
     {
-        MySqlConnection conex = new MySqlConnection();
+        public MySqlConnection conex = new MySqlConnection();
 
         static string server = "Server=35.188.13.111;";
         static string db = "Database=DB_PazHUB;";
@@ -28,9 +28,13 @@ namespace Serverless_Pattern.Helpers
                 result = false;
             }
         }
+        public void close() {
+
+            conex.Close();
+        }
 
         public bool state() {
             return result;
-        }
+        }   
     }
 }
