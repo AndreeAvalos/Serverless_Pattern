@@ -24,18 +24,22 @@ namespace Serverless_Pattern.Functions
             string email = req.Query["email"];
             string password = req.Query["password"];
 
+            Conexion conn = new Conexion();
+            string responseMessage = "Conexion Fallida";
 
 
+            if (conn.state())
+            {
+                Login_function login = new Login_function(conn);
+                if (login.valido(email, password)) {
+                    response respuesta = login.validar_credenciales(email, password);
+                    conn.close();
+                    return new OkObjectResult(JsonConvert.SerializeObject(respuesta));
+                }
+            }
 
-
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            email = email ?? data?.name;
-
-            string responseMessage = string.IsNullOrEmpty(email)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {email}. This HTTP triggered function executed successfully.";
-            return new OkObjectResult(responseMessage);
+            conn.close();
+            return new OkObjectResult(JsonConvert.SerializeObject(new response(false, responseMessage)));
         }
     }
 }
