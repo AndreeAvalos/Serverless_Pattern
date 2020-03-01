@@ -48,7 +48,6 @@ namespace Serverless_Pattern.Helpers
             comando.Parameters.AddWithValue("?p13", Convert.ToDateTime(ua));
             comando.ExecuteNonQuery();
 
-
             return "Registro Exitoso";
         }
 

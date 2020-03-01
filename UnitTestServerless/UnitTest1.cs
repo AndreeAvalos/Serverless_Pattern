@@ -35,6 +35,7 @@ namespace UnitTestServerless.Test
                 Assert.AreEqual(registo.insertar_registro("andreeavalos", "aavalosoto@gmail.com","carlos",
                     "andree", "avalos", "soto","35385252", "1/2/2020", "guatemala", "mixco", "11122", "1/2/2020", "1/2/2020"), "Registro Exitoso");
 
+                conn.close();
                 return;
             }
             Assert.Fail();

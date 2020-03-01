@@ -20,7 +20,7 @@ namespace Serverless_Pattern.Functions
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["user_name"];
+            string user_name = req.Query["user_name"];
             string email = req.Query["email"];
             string primer_nombre = req.Query["primer_nombre"];
             string segundo_nombre = req.Query["segundo_nombre"];
@@ -31,20 +31,38 @@ namespace Serverless_Pattern.Functions
             string pais = req.Query["pais"];
             string ciudad = req.Query["ciudad"];
             string password = req.Query["pass"];
-            string createdAt = req.Query["createdAt"];
-            string updatedAt = req.Query["updatedAt"];
+            string createdAt = DateTime.Now.ToString("dd/MM/yyyy");
+            string updatedAt = DateTime.Now.ToString("dd/MM/yyyy");
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            //string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            //dynamic data = JsonConvert.DeserializeObject(requestBody);
+            //name = name ?? data?.name;
+
             Conexion conn = new Conexion();
+            string responseMessage = "Conexion Fallida";
+
+            if (conn.state() == true)
+            {
+                Registro_function registro = new Registro_function(conn);
+
+                if (registro.valido(user_name, primer_nombre, primer_apellido, fecha_nacimiento, pais, ciudad, password, createdAt, updatedAt)) {
+                    responseMessage = registro.insertar_registro(user_name, email, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, telefono, fecha_nacimiento, pais, ciudad,password, createdAt, updatedAt);
+                    conn.close();
+                    return new OkObjectResult(responseMessage);
+                }
+                
+            }
+            conn.close();
+            return new OkObjectResult(responseMessage);
+
+
 
             //string responseMessage = string.IsNullOrEmpty(name)
             //    ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
             //    : $"La conexion fue un: {conn}";
 
             //return new OkObjectResult(responseMessage);
-            return null;
+          
         }
     }
 }
